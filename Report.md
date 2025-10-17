@@ -18,9 +18,7 @@ Investigate how batch size affects the training of a logistic regression model, 
 - Batch sizes tested: 1, 2, 10, 50, 250, 500
 
 ## Results
-![Training Loss vs Epochs](path_to_your_plot.png)
 
-**Observations:**
 - Small batches (1,2) → noisy updates, slower convergence
 - Medium batches (10,50) → faster convergence, smoother loss
 - Large batches (250,500) → stable but slower per-epoch convergence
