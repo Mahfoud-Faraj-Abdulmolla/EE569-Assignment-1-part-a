@@ -2,7 +2,7 @@
 
 import numpy as np
 import matplotlib.pyplot as plt
-import scipy
+from scipy.stats import multivariate_normal
 
 
 
@@ -39,8 +39,32 @@ class Linear:
 
 # ******** Dataset ******* Note: In the second task, no specific dataset was requested, so random data was used for testing model.
 
-Input = np.random.randn(500,2)
-y_correct = np.random.randint(0,2,(500,1))
+N = 500
+
+mean_class0 = [(0,0)]
+mean_class1 = [(1,1)]
+cov = np.eye(2)*0.2
+X_0 = np.vstack([np.random.multivariate_normal(m,cov,N//2)for m in mean_class0])
+
+X_1 = np.vstack([np.random.multivariate_normal(m,cov,N//2)for m in mean_class1])
+
+
+Input = np.vstack(([X_0,X_1]))
+y_correct = np.array([0]*(N//2) + [1]*(N//2))
+# تخليط البيانات
+p = np.random.permutation(N)
+Input= Input[p]
+y_correct= y_correct[p]
+
+
+# Plot  Dataset
+
+plt.scatter(Input[y_correct==0][:,0], Input[y_correct==0][:,1], color='red', label='Class 0')
+plt.scatter(Input[y_correct==1][:,0], Input[y_correct==1][:,1], color='blue', label='Class 1')
+plt.title("XOR DATASET")
+plt.legend()
+plt.show()
+
 
 
 
@@ -54,6 +78,7 @@ def sigmoid(z):
 
 def loss(y_prediction,y_correct):
     epsilon = 1e-8
+    y_correct = y_correct.reshape(-1, 1)
     return -np.mean(y_correct * np.log(y_prediction + epsilon) + (1 - y_correct) * np.log(1 - y_prediction + epsilon))
 
 
@@ -101,7 +126,7 @@ def training_model(batch_size,epoch=100):
             epock_loss+= los
 
             # Backpobagation
-            dz = y_prediction-y_batch
+            dz = (y_prediction - y_batch.reshape(-1,1))
             dx,dw,db = Linear_node.Backpopagation(dz)
             # Ubdate w and b
             Linear_node.w -= learning_rate * dw
@@ -110,15 +135,13 @@ def training_model(batch_size,epoch=100):
 
     return losses
 # **************Task 4*****************
-
-
 # ********* compare different Batch size *********
 
 batch_size= [1,2,10,50,250,500]
 
 # Number of epochs ----
 
-epoch = 500
+epoch = 10000
 
 plt.figure(figsize=(10,6))
 
@@ -133,8 +156,6 @@ plt.title("Effect of Batch Size on Training Losses")
 plt.legend()
 plt.grid(True)
 plt.show()
-
-
 
 
 
