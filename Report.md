@@ -14,7 +14,7 @@ Investigate how batch size affects the training of a logistic regression model, 
 ## Experimental Setup
 - Dataset: 500 samples, 2 features, random binary labels
 - Learning rate: 0.01
-- Epochs: 500
+- Epochs: 10000
 - Batch sizes tested: 1, 2, 10, 50, 250, 500
 
 ## Results
